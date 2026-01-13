@@ -71,6 +71,17 @@ export default function RegisterLayout() {
     }
   }, [session?.user?.id, fetchStatus]);
 
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden && session?.user?.id && status?.userStatus) {
+        fetchStatus();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [session?.user?.id, status?.userStatus, fetchStatus]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session?.user?.id) {
@@ -112,7 +123,12 @@ export default function RegisterLayout() {
   };
 
   if (loading) return (
-    <div className="min-h-screen flex items-center justify-center bg-black/40">
+    <div className="min-h-screen flex items-center justify-center bg-black/40 relative">
+      <div className="fixed inset-0 pointer-events-none z-[-1]">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay"></div>
+        <div className="absolute inset-0 bg-radial-[circle_at_center,transparent_0%,#000000_90%]"></div>
+        <div className="absolute top-[-10%] left-[20%] w-[500px] h-[500px] bg-red-900/40 rounded-full blur-[100px] animate-pulse"></div>
+      </div>
       <div className="flex flex-col items-center gap-3 rounded-md bg-white/10 px-6 py-5 backdrop-blur-md">
         <Loader2 className="h-6 w-6 animate-spin text-white" />
         <span className="text-sm text-white/90">Carregando...</span>
@@ -123,7 +139,11 @@ export default function RegisterLayout() {
   if (!session) {
     return (
       <main className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-red-900/20 blur-[100px] rounded-full pointer-events-none" />
+        <div className="fixed inset-0 pointer-events-none z-[-1]">
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay"></div>
+          <div className="absolute inset-0 bg-radial-[circle_at_center,transparent_0%,#000000_90%]"></div>
+          <div className="absolute top-[-10%] left-[20%] w-[500px] h-[500px] bg-red-900/40 rounded-full blur-[100px] animate-pulse"></div>
+        </div>
 
         <div className="relative text-center text-white bg-neutral-900/60 backdrop-blur-2xl border border-white/10 rounded-3xl p-12 max-w-md w-full shadow-2xl shadow-black/50">
           <div className="relative inline-block mb-6 group">
@@ -161,7 +181,13 @@ export default function RegisterLayout() {
     }
 
     return (
-      <main className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 max-w-7xl mx-auto">
+      <main className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 max-w-7xl mx-auto relative">
+        <div className="fixed inset-0 pointer-events-none z-[-1]">
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay"></div>
+          <div className="absolute inset-0 bg-radial-[circle_at_center,transparent_0%,#000000_90%]"></div>
+          <div className="absolute top-[-10%] left-[20%] w-[500px] h-[500px] bg-red-900/40 rounded-full blur-[100px] animate-pulse"></div>
+        </div>
+        
         <RecruitmentStepper currentStatus={s} />
         
         <div className="w-full max-w-6xl p-8 md:p-12 text-center rounded-3xl shadow-2xl mt-8">
@@ -175,7 +201,11 @@ export default function RegisterLayout() {
   if (!status?.cycle || status.slotsLeft <= 0) {
     return (
       <main className="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-red-900/20 rounded-full blur-[120px] pointer-events-none" />
+        <div className="fixed inset-0 pointer-events-none z-[-1]">
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay"></div>
+          <div className="absolute inset-0 bg-radial-[circle_at_center,transparent_0%,#000000_90%]"></div>
+          <div className="absolute top-[-10%] left-[20%] w-[500px] h-[500px] bg-red-900/40 rounded-full blur-[100px] animate-pulse"></div>
+        </div>
         <div className="relative z-10 max-w-lg w-full">
           <div className="bg-neutral-900/60 backdrop-blur-2xl border border-white/5 border-t-white/10 rounded-3xl p-8 md:p-12 text-center shadow-2xl shadow-black/50 ring-1 ring-white/5">
             <div className="relative inline-flex mb-8 group">
@@ -203,6 +233,11 @@ export default function RegisterLayout() {
 
   return (
     <main className="min-h-screen flex items-center justify-center p-4 md:p-8 max-w-7xl mx-auto">
+      <div className="fixed inset-0 pointer-events-none z-[-1]">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay"></div>
+        <div className="absolute inset-0 bg-radial-[circle_at_center,transparent_0%,#000000_90%]"></div>
+        <div className="absolute top-[-10%] left-[20%] w-[500px] h-[500px] bg-red-900/40 rounded-full blur-[100px] animate-pulse"></div>
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 w-full bg-black/80 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
         <div className="p-8 md:p-12 border-b lg:border-b-0 lg:border-r border-white/10 bg-neutral-900/20">
           <div className="text-center mb-10">
@@ -277,6 +312,7 @@ export default function RegisterLayout() {
                   placeholder="Ex: 1234"
                   value={identificacao}
                   onChange={(e) => setIdentificacao(e.target.value)}
+                  required
                 />
                 <CustomBorderInput
                   label="Telefone"
@@ -284,6 +320,7 @@ export default function RegisterLayout() {
                   placeholder="Ex: 555-100"
                   value={telefone}
                   onChange={(e) => setTelefone(e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -306,6 +343,7 @@ export default function RegisterLayout() {
                 placeholder="Quem te indicou?"
                 value={nomeMembro}
                 onChange={(e) => setNomeMembro(e.target.value)}
+                required
               />
               <CustomBorderInput
                 label="ID do Membro"
@@ -313,6 +351,7 @@ export default function RegisterLayout() {
                 placeholder="ID do Padrinho"
                 value={idMembro}
                 onChange={(e) => setIdMembro(e.target.value)}
+                required
               />
             </div>
 

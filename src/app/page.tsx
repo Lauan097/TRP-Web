@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from 'next/navigation';
 import { useEffect, useState, useRef } from "react";
 import { FaDiscord, FaBalanceScale, FaUsers, FaHistory } from "react-icons/fa";
 import { FaGun, FaSackDollar, FaBoxOpen, FaArrowRight } from "react-icons/fa6";
@@ -261,6 +262,8 @@ export default function Home() {
   const [botVersion, setBotVersion] = useState<string>('v1.0.0');
   const [recruitmentOpen, setRecruitmentOpen] = useState<boolean>(false);
 
+  const pathname = usePathname();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -284,7 +287,7 @@ export default function Home() {
       }
     };
     fetchData();
-  }, []);
+  }, [pathname]);
 
   return (
     <main className="flex flex-col items-center min-h-screen justify-center px-4 pb-20 overflow-x-hidden">

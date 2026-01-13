@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { API_BASE_URL } from '@/utils/constants';
 import EmbedEditor from '../components/embeds/EmbedEditor';
 import ManageRecPage from '../components/recruiter/ManageRecPage';
 import MemberPage from '../components/members/MemberPage';
@@ -163,6 +164,42 @@ export default function DashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('generals');
   const [isLoaded, setIsLoaded] = useState(false);
+  const [hasAccess, setHasAccess] = useState(false);
+  const [checkingAccess, setCheckingAccess] = useState(true);
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      if (status === 'loading') return;
+      
+      if (!session) {
+        router.push('/');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/site/recruitment/status?user_id=${session.user?.id}`, {
+          headers: { 'X-API-Key': process.env.NEXT_PUBLIC_API_KEY || '' },
+          cache: 'no-store'
+        });
+        const data = await res.json();
+        const isSpecial = data.isSpecial === true;
+        const isAdmin = session.isAdmin === true;
+        
+        if (isAdmin || isSpecial) {
+          setHasAccess(true);
+        } else {
+          router.push('/');
+        }
+      } catch (error) {
+        console.error('Access check failed', error);
+        router.push('/');
+      } finally {
+        setCheckingAccess(false);
+      }
+    };
+
+    checkAccess();
+  }, [session, status, router]);
 
   useEffect(() => {
     const savedTab = localStorage.getItem('dashboardActiveTab');
@@ -183,13 +220,6 @@ export default function DashboardPage() {
   }, [activeTab, isLoaded]);
 
   useEffect(() => {
-    if (status === 'loading') return;
-    if (!session || !session.isAdmin) {
-      router.push('/');
-    }
-  }, [session, status, router]);
-
-  useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
         e.preventDefault();
@@ -201,10 +231,13 @@ export default function DashboardPage() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  if (status === 'loading' || !session?.isAdmin || !isLoaded) {
+  if (status === 'loading' || checkingAccess || !hasAccess || !isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#050505]">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0a0a]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600"></div>
+          <span className="text-gray-400 text-sm animate-pulse">Verificando acesso...</span>
+        </div>
       </div>
     );
   }
@@ -217,7 +250,6 @@ export default function DashboardPage() {
     { id: 'raffles', title: 'Sorteios', icon: Trophy, component: RafflesContent },
     { id: 'logs', title: 'Logs', icon: FileText, component: LogsContent },
   ];
-
 
   const ActiveContent = sections.find(s => s.id === activeTab)?.component || GeneralsContent;
 

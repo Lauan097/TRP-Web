@@ -4,7 +4,6 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import Providers from "./providers";
 import Footer from "./components/Footer";
-import AuthGuard from "./components/AuthGuard";
 
 const rajdhani = Rajdhani({
   variable: "--font-rajdhani",
@@ -15,9 +14,6 @@ const rajdhani = Rajdhani({
 export const metadata: Metadata = {
   title: "Trindade Penumbra - LGC",
   description: "Site oficial da Máfia Trindade Penumbra - LGC",
-  icons: {
-    icon: "/logo_trindade.png",
-  },
 };
 
 export default function RootLayout({
@@ -29,11 +25,9 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={`${rajdhani.variable} font-sans antialiased text-slate-50`}>
         <Providers>
-          <AuthGuard>
-              <Navbar />
-              {children}
-              <Footer />
-          </AuthGuard>
+          <Navbar />
+          {children}
+          <Footer />
         </Providers>
       </body>
     </html>

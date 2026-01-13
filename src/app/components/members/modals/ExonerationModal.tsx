@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { API_BASE_URL } from '@/utils/constants';
-import { toast } from 'sonner';
+import { useToast } from '@/app/components/ToastContext';
 
 interface ExonerationModalProps {
   isOpen: boolean;
@@ -16,6 +16,7 @@ interface ExonerationModalProps {
 export function ExonerationModal({ isOpen, onClose, user, adminId }: ExonerationModalProps) {
   const [reason, setReason] = useState('');
   const [loading, setLoading] = useState(false);
+  const { addToast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,14 +43,14 @@ export function ExonerationModal({ isOpen, onClose, user, adminId }: Exoneration
         throw new Error(errorData.error || 'Falha ao aplicar exoneração');
       }
 
-      toast.success('Exoneração aplicada com sucesso!');
+      addToast('Exoneração aplicada com sucesso!', 'success');
       onClose();
       setReason('');
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(`Erro: ${error.message}`);
+        addToast(`Erro: ${error.message}`, 'error');
       } else {
-        toast.error('Erro desconhecido');
+        addToast('Erro desconhecido', 'error');
       }
       console.error(error);
     } finally {

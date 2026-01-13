@@ -14,7 +14,7 @@ export async function GET() {
       headers: {
         Authorization: `Bot ${botToken}`,
       },
-      next: { revalidate: 60 } 
+      next: { revalidate: 40 } 
     });
 
     if (!response.ok) {

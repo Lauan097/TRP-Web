@@ -39,51 +39,6 @@ interface RequestBody {
   channelId: string;
   content?: string;
   embed?: EmbedData;
-  embeds?: EmbedData[];
-  editLastMessage?: boolean;
-}
-
-function validateEmbed(embed: EmbedData): string | null {
-  if (!embed.title && !embed.description && !embed.url && !embed.image && !embed.thumbnail && (!embed.fields || embed.fields.length === 0)) {
-    return 'A embed deve ter pelo menos um título, descrição, URL, imagem ou campos';
-  }
-
-  if (embed.title && embed.title.length > 256) {
-    return 'Título da embed não pode ter mais de 256 caracteres';
-  }
-
-  if (embed.description && embed.description.length > 4096) {
-    return 'Descrição da embed não pode ter mais de 4096 caracteres';
-  }
-
-  if (embed.author?.name && embed.author.name.length > 256) {
-    return 'Nome do autor não pode ter mais de 256 caracteres';
-  }
-
-  if (embed.footer?.text && embed.footer.text.length > 2048) {
-    return 'Texto do rodapé não pode ter mais de 2048 caracteres';
-  }
-
-  if (embed.fields && Array.isArray(embed.fields)) {
-    if (embed.fields.length > 25) {
-      return 'Máximo de 25 campos permitidos por embed';
-    }
-
-    for (const field of embed.fields) {
-      if (!field.name || !field.value) {
-        return 'Todos os campos devem ter nome e valor';
-      }
-
-      if (field.name.length > 256) {
-        return 'Nome do campo não pode ter mais de 256 caracteres';
-      }
-
-      if (field.value.length > 1024) {
-        return 'Valor do campo não pode ter mais de 1024 caracteres';
-      }
-    }
-  }
-  return null;
 }
 
 export async function POST(request: NextRequest) {
@@ -97,7 +52,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!body.content && !body.embed && (!body.embeds || body.embeds.length === 0)) {
+    if (!body.content && !body.embed) {
       return NextResponse.json(
         { error: 'Conteúdo de mensagem ou embed é obrigatório' },
         { status: 400 }
@@ -105,20 +60,73 @@ export async function POST(request: NextRequest) {
     }
 
     if (body.embed) {
-      const error = validateEmbed(body.embed);
-      if (error) {
-        return NextResponse.json({ error }, { status: 400 });
+      const embed = body.embed;
+      
+      if (!embed.title && !embed.description && !embed.url) {
+        return NextResponse.json(
+          { error: 'A embed deve ter pelo menos um título, descrição ou URL' },
+          { status: 400 }
+        );
       }
-    }
 
-    if (body.embeds && Array.isArray(body.embeds)) {
-      if (body.embeds.length > 10) {
-         return NextResponse.json({ error: 'Máximo de 10 embeds por mensagem' }, { status: 400 });
+      if (embed.title && embed.title.length > 256) {
+        return NextResponse.json(
+          { error: 'Título da embed não pode ter mais de 256 caracteres' },
+          { status: 400 }
+        );
       }
-      for (let i = 0; i < body.embeds.length; i++) {
-        const error = validateEmbed(body.embeds[i]);
-        if (error) {
-          return NextResponse.json({ error: `Embed ${i + 1}: ${error}` }, { status: 400 });
+
+      if (embed.description && embed.description.length > 4096) {
+        return NextResponse.json(
+          { error: 'Descrição da embed não pode ter mais de 4096 caracteres' },
+          { status: 400 }
+        );
+      }
+
+      if (embed.author?.name && embed.author.name.length > 256) {
+        return NextResponse.json(
+          { error: 'Nome do autor não pode ter mais de 256 caracteres' },
+          { status: 400 }
+        );
+      }
+
+      if (embed.footer?.text && embed.footer.text.length > 2048) {
+        return NextResponse.json(
+          { error: 'Texto do rodapé não pode ter mais de 2048 caracteres' },
+          { status: 400 }
+        );
+      }
+
+      // Validar campos
+      if (embed.fields && Array.isArray(embed.fields)) {
+        if (embed.fields.length > 25) {
+          return NextResponse.json(
+            { error: 'Máximo de 25 campos permitidos' },
+            { status: 400 }
+          );
+        }
+
+        for (const field of embed.fields) {
+          if (!field.name || !field.value) {
+            return NextResponse.json(
+              { error: 'Todos os campos devem ter nome e valor' },
+              { status: 400 }
+            );
+          }
+
+          if (field.name.length > 256) {
+            return NextResponse.json(
+              { error: 'Nome do campo não pode ter mais de 256 caracteres' },
+              { status: 400 }
+            );
+          }
+
+          if (field.value.length > 1024) {
+            return NextResponse.json(
+              { error: 'Valor do campo não pode ter mais de 1024 caracteres' },
+              { status: 400 }
+            );
+          }
         }
       }
     }
@@ -141,8 +149,6 @@ export async function POST(request: NextRequest) {
         channelId: body.channelId,
         content: body.content || undefined,
         embed: body.embed || undefined,
-        embeds: body.embeds || undefined,
-        editLastMessage: body.editLastMessage || false,
       }),
     });
 

@@ -15,7 +15,7 @@ interface SelectOption {
 }
 
 interface CustomSelectMenuProps {
-  label: string;
+  label?: string;
   options: SelectOption[];
   value?: string | string[];
   onChange: (value: string | string[]) => void;
@@ -169,7 +169,7 @@ export default function CustomSelectMenu({
           {label}
         </label>
 
-        <PopoverContent className="w-(--radix-popover-trigger-width) p-0 bg-[#202022] border-gray-600 z-50" align="start" sideOffset={4}>
+        <PopoverContent className="w-(--radix-popover-trigger-width) p-0 bg-[#202022] border-gray-600 z-9999!" align="start" sideOffset={4}>
           <style>{`
             .custom-dropdown-scroll::-webkit-scrollbar {
               width: 8px;

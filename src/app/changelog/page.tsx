@@ -8,7 +8,6 @@ import Link from "next/link";
 import Image from "next/image";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import React from "react";
 
 interface Release {
   id: number;
@@ -148,7 +147,7 @@ export default function ChangelogPage() {
                         a: ({...props}) => <a className="text-blue-400 underline" {...props} />,
                         em: ({...props}) => <em className="italic" {...props} />,
                         strong: ({...props}) => <strong className="font-semibold" {...props} />,
-                        code: ({ inline, className, children, ...props}) => {
+                        code: ({ inline, className, children, ...props }: { node?: unknown; inline?: boolean; className?: string; children?: React.ReactNode } & React.HTMLAttributes<HTMLElement>) => {
                           return inline ? (
                             <code className="bg-neutral-950 px-1.5 py-0.5 rounded-sm text-sm font-mono w-fit" {...props}>{children}</code>
                           ) : (

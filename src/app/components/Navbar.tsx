@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { API_BASE_URL } from '@/utils/constants';
 // Ícones
 import { FaFileAlt, FaBookOpen } from "react-icons/fa";
 import { FaBan, FaDiscord, FaArrowRight } from "react-icons/fa6";
@@ -21,9 +22,29 @@ export default function Navbar() {
   const [dropdownUserOpen, setDropdownUserOpen] = useState(false);
   const [align, setAlign] = useState<'center' | 'end'>('center');
   const userButtonRef = useRef<HTMLDivElement>(null);
+  const [hasSpecialRole, setHasSpecialRole] = useState(false);
 
   const { data: session } = useSession();
   const { isVerified } = useAuth();
+
+  useEffect(() => {
+    const checkSpecialRole = async () => {
+      if (!session?.user?.id) return;
+      
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/site/recruitment/status?user_id=${session.user.id}`, {
+          headers: { 'X-API-Key': process.env.NEXT_PUBLIC_API_KEY || '' },
+          cache: 'no-store'
+        });
+        const data = await res.json();
+        setHasSpecialRole(data.isSpecial === true);
+      } catch (error) {
+        console.error('Failed to check special role', error);
+      }
+    };
+
+    checkSpecialRole();
+  }, [session]);
 
   useEffect(() => {
     if (isOpen) {
@@ -131,12 +152,12 @@ export default function Navbar() {
                           {isVerified && (
                             <>
                               <Link href="/profile" className={grayStyle}>Meu Perfil <CgProfile className="ml-auto opacity-70" /></Link>
-                              {session.isAdmin && (
+                              {(session.isAdmin || hasSpecialRole) && (
                                 <Link href="/dashboard" className={grayStyle}>Dashboard <LuLayoutDashboard className="ml-auto opacity-70" /></Link>
                               )}
                             </>
                           )}
-                          <button onClick={() => signOut()} className={`${redStyle} mx-auto w-full`}> 
+                          <button onClick={() => signOut()} className={`${redStyle} mx-auto w-full cursor-pointer`}> 
                             Sair <IoLogOutOutline className="ml-auto" />
                           </button>
                         </div>

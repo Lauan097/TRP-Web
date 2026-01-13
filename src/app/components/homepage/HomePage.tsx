@@ -127,7 +127,7 @@ export default function DashboardHome() {
 
 
   return (
-    <div className="p-8 space-y-10 bg-[#0f0f0f] min-h-screen text-gray-100 font-sans selection:bg-purple-500/30 rounded-2xl">
+    <div className="p-8 space-y-10 bg-[#0f0f0f] min-h-screen text-gray-100 font-sans rounded-2xl">
       
       <header className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-[#2b2b2b] pb-6">
         <div>

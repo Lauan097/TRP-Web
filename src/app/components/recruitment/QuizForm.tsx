@@ -202,7 +202,7 @@ export default function QuizForm({ userId, onSuccess }: QuizFormProps) {
                     value={answers['idadePersonagem'] ? parseInt(answers['idadePersonagem']) : 18}
                     onChange={(val) => handleChange('idadePersonagem', val.toString())}
                     min={1} max={100}
-                    className="bg-black/60 border border-white/5 text-zinc-200 rounded-xl h-12 w-full focus:border-red-600/60 focus:ring-0 focus:outline-none transition-all"
+                    className="bg-black/60 border border-white/5! text-zinc-200 rounded-xl mt-4.5 focus:border-red-600/60! focus:ring-0 focus:outline-none transition-all"
                   />
                 </div>
 

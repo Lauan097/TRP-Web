@@ -51,10 +51,6 @@ export default function StatusDisplay({ status, data }: StatusDisplayProps) {
                 <div className="absolute -inset-3 border border-dashed border-amber-500/20 rounded-full animate-[spin_10s_linear_infinite]" />
                 <div className="relative w-24 h-24 bg-linear-to-b from-amber-900/20 to-black rounded-full flex items-center justify-center border border-amber-500/30 shadow-[0_0_30px_rgba(245,158,11,0.15)]">
                   <Clock size={48} className="text-amber-500 drop-shadow-md" strokeWidth={1.5} />
-                  <div className="absolute bottom-2 right-2 flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
-                  </div>
                 </div>
               </div>
               <div className="space-y-6">
@@ -94,11 +90,6 @@ export default function StatusDisplay({ status, data }: StatusDisplayProps) {
                 <div className="absolute inset-0 bg-emerald-600/30 blur-2xl rounded-full" />
                 <div className="relative w-28 h-28 bg-linear-to-b from-emerald-950 to-black rounded-full flex items-center justify-center border border-emerald-500/30 shadow-[0_0_40px_rgba(16,185,129,0.2)] group">
                   <CheckCircle size={56} className="text-emerald-400 drop-shadow-[0_2px_10px_rgba(52,211,153,0.5)] transition-transform group-hover:scale-105 duration-300" strokeWidth={1.5} />
-                  <Sparkles size={24} className="absolute top-1 right-2 text-emerald-200 animate-pulse opacity-70" />
-                  <div className="absolute bottom-1 right-1 flex h-4 w-4">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-50"></span>
-                    <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-black"></span>
-                  </div>
                 </div>
               </div>
               <div className="space-y-6">

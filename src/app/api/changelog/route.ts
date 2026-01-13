@@ -5,6 +5,7 @@ interface GitHubRelease {
   tag_name: string;
   name: string;
   published_at: string;
+  updated_at: string;
   body: string;
   html_url: string;
   author: {
