@@ -112,7 +112,7 @@ export default function ChangelogPage() {
                         </span>
                       </div>
                       <h2 className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">
-                        {release.title || release.version}
+                        <a href={release.url} target='_blank' className='hover:underline'>{release.title || release.version}</a>
                       </h2>
                     </div>
                     
@@ -135,16 +135,16 @@ export default function ChangelogPage() {
                     <ReactMarkdown
                       remarkPlugins={[remarkGfm]}
                       components={{
-                        h1: ({...props}) => <h1 className="text-xl md:text-2xl font-bold text-white mb-2" {...props} />,
-                        h2: ({...props}) => <h2 className="text-lg md:text-xl font-semibold text-white mb-2" {...props} />,
-                        h3: ({...props}) => <h3 className="text-base md:text-lg font-medium text-white mb-2" {...props} />,
-                        h4: ({...props}) => <h4 className="text-base font-medium text-white mb-2" {...props} />,
-                        h5: ({...props}) => <h5 className="text-sm font-medium text-white mb-2" {...props} />,
-                        h6: ({...props}) => <h6 className="text-sm font-medium text-white mb-2" {...props} />,
+                        h1: ({...props}) => <h1 className="text-xl md:text-2xl font-bold text-white mb-4 mt-2 border-b border-white/10 pb-2" {...props} />,
+                        h2: ({...props}) => <h2 className="text-lg md:text-xl font-semibold text-white mb-2 mt-2" {...props} />,
+                        h3: ({...props}) => <h3 className="text-base md:text-lg font-medium text-white mb-2 mt-2" {...props} />,
+                        h4: ({...props}) => <h4 className="text-base font-medium text-white mb-2 mt-2" {...props} />,
+                        h5: ({...props}) => <h5 className="text-sm font-medium text-white mb-2 mt-2" {...props} />,
+                        h6: ({...props}) => <h6 className="text-sm font-medium text-white mb-2 mt-2" {...props} />,
                         p: ({ children, ...props }: { node?: unknown; children?: React.ReactNode } & React.HTMLAttributes<HTMLElement>) => {
-                          return React.createElement('div', { className: 'mb-4 leading-7 text-gray-300', ...props }, children as React.ReactNode);
+                          return React.createElement('div', { className: 'mb-4 leading-7', ...props }, children as React.ReactNode);
                         },
-                        a: ({...props}) => <a className="text-blue-400 underline" {...props} />,
+                        a: ({...props}) => <a className="text-blue-400 hover:underline" {...props} />,
                         em: ({...props}) => <em className="italic" {...props} />,
                         strong: ({...props}) => <strong className="font-semibold" {...props} />,
                         code: ({ inline, className, children, ...props }: { node?: unknown; inline?: boolean; className?: string; children?: React.ReactNode } & React.HTMLAttributes<HTMLElement>) => {
@@ -156,8 +156,14 @@ export default function ChangelogPage() {
                         },
                         ul: ({...props}) => <ul className="list-disc list-inside ml-4" {...props} />,
                         ol: ({...props}) => <ol className="list-decimal list-inside ml-4" {...props} />,
-                        blockquote: ({...props}) => <blockquote className="border-l-2 border-white/10 pl-4 italic text-gray-300" {...props} />,
+                        blockquote: ({...props}) => <blockquote className="border-l-4 border-white/10 pl-4 text-gray-400 mt-4" {...props} />,
                         table: ({...props}) => <div className="overflow-auto"><table className="w-full table-auto text-sm" {...props} /></div>,
+                        hr: ({ ...props }) => (
+                          <hr
+                            className="my-6 border-0 h-px bg-white/15 p-0.5"
+                            {...props}
+                          />
+                        ),
                       }}
                     >
                       {release.description}

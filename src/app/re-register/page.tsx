@@ -4,10 +4,12 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import CustomBorderInput from '../components/CustomBorderInput';
+import CustomSelectMenu from '../components/embeds/CustomSelectMenu';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/app/components/ToastContext";
 import { Loader2, User, Phone, Backpack, Shield, X } from 'lucide-react';
 import { FaDiscord, FaOrcid, FaCheckCircle } from "react-icons/fa";
+import { FiAlertTriangle } from "react-icons/fi";
 
 interface LegacyProfile {
   user_name: string;
@@ -16,7 +18,13 @@ interface LegacyProfile {
   user_telephone: string;
   user_shift: string;
   approver_nick: string;
-}
+};
+
+const SHIFT_ROLE_MAP: Record<string, { name: string; color: string; bg?: string }> = {
+  '1447988476237709392': { name: '@ Manhã', color: 'text-yellow-400', bg: 'bg-yellow-500/12' },
+  '1447988532932120588': { name: '@ Tarde', color: 'text-orange-400', bg: 'bg-orange-500/12' },
+  '1447988583217758318': { name: '@ Noite', color: 'text-blue-400', bg: 'bg-blue-500/12' },
+};
 
 export default function ReRegisterPage() {
   const { data: session, update } = useSession();
@@ -38,6 +46,14 @@ export default function ReRegisterPage() {
   
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5500';
 
+  function extractNameAndId(text: string): { name: string; id: string } {
+    const match = text.match(/^(.+?)\s*\[(\d{1,6})\]$/);
+    if (match) {
+      return { name: match[1].replace(/^TRP\s*»\s*/, '').trim(), id: match[2] };
+    }
+    return { name: text, id: '' };
+  }
+
   const checkLegacy = useCallback(async (userId: string) => {
     try {
       const res = await fetch(`${apiUrl}/api/site/recruitment/legacy-profile?user_id=${userId}`);
@@ -45,8 +61,15 @@ export default function ReRegisterPage() {
       
       if (data.found) {
         setProfile(data.profile);
-        setNomeJogo(data.profile.user_name || '');
+
+        const { name: playerName, id: playerId } = extractNameAndId(data.profile.user_name || '');
+        setNomeJogo(playerName);
+        setIdentificacao(data.profile.user_game_id || playerId);
         setTelefone(data.profile.user_telephone || '');
+        
+        const { name: approverName, id: approverId } = extractNameAndId(data.profile.approver_nick || '');
+        setNomeMembro(approverName || 'Padrinho');
+        setIdMembro(approverId || '777');
       } else {
         if (data.reason === 'ALREADY_REGISTERED') {
            router.push('/');
@@ -71,11 +94,16 @@ export default function ReRegisterPage() {
 
     if (session?.user?.id && !profile) {
       checkLegacy(session.user.id);
-      setIdentificacao(session.user.id);
     } else if (session === null) {
       router.push('/');
+    } else if (session?.user?.name && !loading && !profile) {
+      const { name, id } = extractNameAndId(session.user.name);
+      setNomeJogo(name);
+      setIdentificacao(id);
+      setNomeMembro('Padrinho');
+      setIdMembro('777');
     }
-  }, [session, router, checkLegacy, profile]);
+  }, [session, router, checkLegacy, profile, loading]);
 
   function normalizeString(input?: string | null) {
     if (!input) return '';
@@ -93,19 +121,21 @@ export default function ReRegisterPage() {
 
     if (turnos.length === 0) {
       setTurnosError('Selecione pelo menos um turno/cargo');
-      addToast('Por favor selecione pelo menos um turno/cargo', 'error');
+      addToast('Por favor, selecione um turno/cargo', 'error');
       return;
     }
 
     setSubmitting(true);
     try {
+
+
       const normalizedFormData = {
         nomeJogo: normalizeString(nomeJogo),
         identificacao: normalizeString(identificacao),
         telefone: normalizeString(telefone),
         nomeMembro: normalizeString(nomeMembro),
         idMembro: normalizeString(idMembro),
-        turnos: turnos.map(t => normalizeString(t))
+        turnos: turnos
       };
 
       const res = await fetch(`${apiUrl}/api/site/recruitment/legacy-apply`, {
@@ -171,7 +201,7 @@ export default function ReRegisterPage() {
           <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-linear-to-r from-red-600 to-red-900 mb-4">
             Atualização Cadastral
           </h1>
-          <p className="text-gray-400 text-md bg-[#111] border border-red-900/30 rounded-xl p-2 inline-block">
+          <p className="text-gray-400 text-md font-medium bg-[#111] border border-red-900/30 rounded-xl p-2 inline-block">
             Bem-vindo de volta! Como membro veterano, precisamos apenas que valide seus dados para migrar para o novo sistema.
           </p>
         </div>
@@ -183,18 +213,37 @@ export default function ReRegisterPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <InfoCard icon={<User />} label="Nome em Jogo" value={profile.user_name} />
-            <InfoCard icon={<FaOrcid />} label="ID do Discord" value={profile.user_game_id} />
+            <InfoCard icon={<User />} label="Nome em Jogo" value={nomeJogo} />
+            <InfoCard icon={<FaOrcid />} label="ID em Jogo" value={identificacao} />
             <InfoCard icon={<Phone />} label="Telefone" value={profile.user_telephone} />
           </div>
 
           <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <InfoCard icon={<FaCheckCircle />} label="Aprovado por" value={profile.approver_nick} />
-            <InfoCard icon={<FaDiscord />} label="ID (Discord)" value={profile.user_id} />
+            <InfoCard icon={<FaCheckCircle />} label="Nome do Indicador" value={nomeMembro} />
+            <InfoCard icon={<FaDiscord />} label="ID do Indicador" value={idMembro} />
           </div>
 
           <div className="mt-6 text-sm">
-            <InfoCard icon={<Backpack />} label="Turno/Cargo" value={profile.user_shift} />
+            <div className="bg-[#0a0a0a] border border-[#222] p-4 rounded-lg flex items-start gap-4 hover:border-red-900/50 transition-colors group">
+              <div className="p-3 bg-[#111] rounded-lg text-gray-500 group-hover:text-red-500 transition-colors">
+                <Backpack />
+              </div>
+              <div className="flex-1">
+                <span className="block text-gray-500 text-sm mb-1">Turno/Cargo</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {profile.user_shift?.split(',').map((id, idx) => {
+                    const shift = SHIFT_ROLE_MAP[id.trim()];
+                    return shift ? (
+                      <span key={idx} className={`px-3 py-0.5 rounded-md font-medium ${shift.color} ${shift.bg}`}>
+                        {shift.name}
+                      </span>
+                    ) : (
+                      <span key={idx} className="text-white">{id}</span>
+                    );
+                  }) || <span className="text-gray-400">Não informado</span>}
+                </div>
+              </div>
+            </div>
           </div>
           
           <div className="mt-8 flex justify-end">
@@ -202,7 +251,7 @@ export default function ReRegisterPage() {
               onClick={() => setIsModalOpen(true)}
               className="bg-red-600 hover:bg-red-700 text-white font-bold py-6 px-8 rounded-lg text-lg shadow-lg hover:shadow-red-600/20 transition-all cursor-pointer"
             >
-              Confirmar e Migrar
+              Confirmar e Iniciar
             </Button>
           </div>
         </div>
@@ -223,14 +272,15 @@ export default function ReRegisterPage() {
             
             <form onSubmit={handleSubmit} className="p-6 space-y-6">
               <div className="bg-red-900/10 border border-red-900/30 p-4 rounded-lg mb-6">
-                <p className="text-red-200 text-sm">
-                  ⚠️ Por favor, confirme ou atualize seus dados atuais para o novo sistema.
+                <p className="text-red-200 text-sm flex items-center font-sans">
+                  <FiAlertTriangle className="w-4 h-4 mr-2 text-yellow-400" />
+                  Por favor, confirme ou atualize seus dados atuais para o novo sistema.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <CustomBorderInput
-                  label="Nome do Personagem + ID"
+                  label="Nome do Personagem"
                   placeholder="Ex: SeuNome 123"
                   value={nomeJogo}
                   onChange={(e) => setNomeJogo(e.target.value)}
@@ -239,8 +289,8 @@ export default function ReRegisterPage() {
                 />
                 
                 <CustomBorderInput
-                  label="Identificação (Discord ID)"
-                  placeholder="Seu ID do Discord"
+                  label="Id do Personagem"
+                  placeholder="O Id do seu Personagem"
                   value={identificacao}
                   onChange={(e) => setIdentificacao(e.target.value)}
                   disabled
@@ -248,7 +298,7 @@ export default function ReRegisterPage() {
                 />
 
                 <CustomBorderInput
-                  label="Telefone (IC)"
+                  label="Telefone in-game"
                   placeholder="Ex: 555-0123"
                   value={telefone}
                   onChange={(e) => setTelefone(e.target.value)}
@@ -256,51 +306,59 @@ export default function ReRegisterPage() {
                   required
                 />
 
-                <div className="col-span-2 md:col-span-2">
-                    <label className="block text-gray-400 text-sm mb-2">Turnos Disponíveis <span className="text-red-400">*</span></label>
-                    <div className={`flex flex-wrap gap-2 ${turnosError ? 'border border-red-600 p-2 rounded' : ''}`} role="group" aria-labelledby="turnos-group">
-                        {['Manhã', 'Tarde', 'Noite'].map((turno) => (
-                        <button
-                            key={turno}
-                            type="button"
-                            onClick={() => {
-                            setTurnos(prev => {
-                                const next = prev.includes(turno) ? prev.filter(t => t !== turno) : [...prev, turno];
-                                if (next.length > 0) setTurnosError('');
-                                return next;
-                            });
-                            }}
-                            className={`px-4 py-2 rounded border transition-all ${
-                            turnos.includes(turno)
-                                ? 'bg-red-600 border-red-600 text-white'
-                                : 'bg-transparent border-[#333] text-gray-400 hover:border-gray-500'
-                            }`}
-                        >
-                            {turno}
-                        </button>
-                        ))}
-                    </div>
-                    {turnosError && <p className="text-sm text-red-400 mt-2">{turnosError}</p>}
-                </div>
+                <CustomSelectMenu
+                  label="Turnos Disponíveis"
+                  options={[
+                    {
+                      name: 'Turno da Manhã',
+                      value: '1447988476237709392',
+                      description: 'Selecione se disponível no turno da manhã',
+                    },
+                    {
+                      name: 'Turno da Tarde',
+                      value: '1447988532932120588',
+                      description: 'Selecione se disponível no turno da tarde',
+                    },
+                    {
+                      name: 'Turno da Noite',
+                      value: '1447988583217758318',
+                      description: 'Selecione se disponível no turno da noite',
+                    }
+                  ]}
+                  value={turnos}
+                  onChange={(selected) => {
+                    const selectedArray = Array.isArray(selected) ? selected : [selected];
+                    setTurnos(selectedArray);
+                    if (selectedArray.length > 0) setTurnosError('');
+                  }}
+                  placeholder="Selecione os turnos"
+                  multiSelect={true}
+                  className={turnosError ? 'border-red-500' : ''}
+                />
+              </div>
 
+              <hr className="my-6 border-t border-[#222] p-2" />
+
+              <div className='grid grid-cols-2 gap-6'>
                 <CustomBorderInput
-                  label="Nome do Recrutador (Indicação)"
+                  label="Nome do Aprovador"
                   placeholder="Quem te recrutou?"
                   value={nomeMembro}
                   onChange={(e) => setNomeMembro(e.target.value)}
-                  disabled={submitting}
+                  disabled
                   required
                 />
 
-                 <CustomBorderInput
-                  label="ID do Recrutador"
+                <CustomBorderInput
+                  label="ID do Aprovador"
                   placeholder="ID do recrutador"
                   value={idMembro}
                   onChange={(e) => setIdMembro(e.target.value)}
-                  disabled={submitting}
+                  disabled
                   required
                 />
               </div>
+              
 
               <div className="pt-6 border-t border-[#222] flex justify-end gap-3">
                 <Button 
@@ -312,13 +370,13 @@ export default function ReRegisterPage() {
                 </Button>
                 <Button 
                   type="submit" 
-                  disabled={submitting || turnos.length === 0}
+                  disabled={submitting}
                   title={turnos.length === 0 ? 'Selecione pelo menos um turno' : undefined}
-                  className={`bg-red-600 hover:bg-red-700 min-w-[150px] cursor-pointer ${turnos.length === 0 ? 'opacity-60 cursor-not-allowed' : ''}`}
+                  className={`bg-red-600 hover:bg-red-600 min-w-[150px] cursor-pointer ${turnos.length === 0 ? 'opacity-60 cursor-not-allowed!' : 'hover:bg-red-800 transition-colors'}`}
                 >
                   {submitting ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin"/> Processando...</>
-                  ) : 'Finalizar Migração'}
+                  ) : 'Validar Dados'}
                 </Button>
               </div>
             </form>
@@ -337,7 +395,7 @@ function InfoCard({ icon, label, value }: { icon: React.ReactNode, label: string
       </div>
       <div>
         <span className="block text-gray-500 text-sm mb-1">{label}</span>
-        <span className="block text-white font-medium break-all">{value || 'N/A'}</span>
+        <span className="block text-white font-medium break-all">{value || 'Não Informado'}</span>
       </div>
     </div>
   );
