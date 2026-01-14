@@ -55,7 +55,7 @@ export default function ChangelogPage() {
 
   return (
     <main className="min-h-screen bg-[#05050500] text-white pb-20">
-      <div className="relative h-[300px] w-full overflow-hidden">
+      <div className="relative h-75 w-full overflow-hidden">
         <div className="absolute inset-0 z-10"></div>
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
         

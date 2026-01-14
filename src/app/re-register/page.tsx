@@ -372,7 +372,7 @@ export default function ReRegisterPage() {
                   type="submit" 
                   disabled={submitting}
                   title={turnos.length === 0 ? 'Selecione pelo menos um turno' : undefined}
-                  className={`bg-red-600 hover:bg-red-600 min-w-[150px] cursor-pointer ${turnos.length === 0 ? 'opacity-60 cursor-not-allowed!' : 'hover:bg-red-800 transition-colors'}`}
+                  className={`bg-red-600 hover:bg-red-600 min-w-37.5 cursor-pointer ${turnos.length === 0 ? 'opacity-60 cursor-not-allowed!' : 'hover:bg-red-800 transition-colors'}`}
                 >
                   {submitting ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin"/> Processando...</>
