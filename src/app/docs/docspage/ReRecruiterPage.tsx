@@ -108,10 +108,11 @@ export default function ReRecruiterPage() {
         </div>
 
         <div className="mt-8 p-4 rounded-2xl bg-linear-to-r from-red-900/10 to-transparent border border-white/5">
-          <h4 className="text-red-500 font-bold mb-2 flex items-center"><LuOctagonAlert className="mr-1" />Nota</h4>
+          <h4 className="text-red-500 font-bold mb-2 flex items-center"><LuOctagonAlert className="mr-1" />Importante!</h4>
           <p className="text-sm text-gray-400 mb-4">
-            Insira seu Nome e ID juntos, sem a inicial <span className="text-red-500 font-semibold">TRP »</span> , ele deve ficar no formato 
-            <span className="text-green-400 font-mono"> Nome (ID)</span>.
+            Insira sempre dados <span className="text-green-400 font-mono"> Verdadeiros</span>. Caso alguns do seus dados não apareçam no card de dados antigos, insira-os 
+            no modal de recadastramento. Se os dados aparecerem corretamente no card de dados antigos, insira-os no modal de recadastramento.
+            
           </p>
         </div>
 

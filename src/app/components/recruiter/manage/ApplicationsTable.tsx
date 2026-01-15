@@ -89,7 +89,7 @@ function ActionsMenu({ app, onView, onDelete }: ActionsMenuProps) {
         </TooltipContent>
       </Tooltip>
 
-      <DropdownMenuContent align="center" className="bg-[#272727] border border-white/10 shadow-2xl min-w-[190px]">
+      <DropdownMenuContent align="center" className="bg-[#272727] border border-white/10 shadow-2xl min-w-47.5">
         
         <DropdownMenuItem onClick={() => onView(app, 'solicitation')}>
           Ver Solicitação
@@ -282,7 +282,7 @@ export function ApplicationsTable({ applications, onView, onUpdateStatus, onSche
                   </td>
                   <td className="p-4">
                     <div className="flex flex-col gap-1 text-xs">
-                      <span className="flex items-center gap-1"><ThumbsUp size={14}/>{app.data.nomeMembro || '-'} ({app.data.identificacao})</span>
+                      <span className="flex items-center gap-1"><ThumbsUp size={14}/>{app.data.nomeMembro || '-'} ({app.data.idMembro})</span>
                       <span className="flex items-center gap-1"><Clock size={14}/> {new Date(app.created_at).toLocaleDateString()}</span>
                     </div>
                   </td>
@@ -346,7 +346,7 @@ export function ApplicationsTable({ applications, onView, onUpdateStatus, onSche
             >
               <ChevronLeft size={16} />
             </Button>
-            <div className="text-sm font-medium text-white min-w-[100px] text-center">
+            <div className="text-sm font-medium text-white min-w-25 text-center">
               Página {currentPage} de {totalPages}
             </div>
             <Button

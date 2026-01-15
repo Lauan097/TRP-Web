@@ -151,7 +151,7 @@ export default function StatusDisplay({ status, data }: StatusDisplayProps) {
                     Aguardando julgamento do Conselho
                   </p>
                 </div>
-                <div className="w-full max-w-[120px] h-px bg-linear-to-r from-transparent via-violet-500/50 to-transparent mx-auto" />
+                <div className="w-full max-w-30 h-px bg-linear-to-r from-transparent via-violet-500/50 to-transparent mx-auto" />
                 <p className="text-neutral-400 max-w-md mx-auto leading-relaxed text-lg font-light">
                   Suas respostas foram registradas no sistema. <br/>
                   <span className="text-violet-400/90">O conselho está avaliando seu perfil.</span>
@@ -292,7 +292,7 @@ export default function StatusDisplay({ status, data }: StatusDisplayProps) {
                   </p>
                 </div>
               </div>
-              <div className="w-full md:w-[350px] bg-black/20 border-l border-gray-500/10 p-4 flex flex-col justify-center">
+              <div className="w-full md:w-87.5 bg-black/20 border-l border-gray-500/10 p-4 flex flex-col justify-center">
                 <div className="mt-2 mb-6 bg-neutral-950/20 border border-gray-500/20 rounded-xl p-4 flex flex-col gap-3">
                   <div>
                     <span className="text-[10px] text-red-500/50 uppercase tracking-widest font-bold block mb-1">
@@ -312,7 +312,7 @@ export default function StatusDisplay({ status, data }: StatusDisplayProps) {
                     </p>
                   </div>
                 </div>
-                <div className="relative h-full max-h-[600px] w-full rounded-2xl overflow-hidden border border-gray-500/20 shadow-lg group">
+                <div className="relative h-full max-h-150 w-full rounded-2xl overflow-hidden border border-gray-500/20 shadow-lg group">
                   <Image 
                     src="https://i.imgur.com/zjo4P1d.png" 
                     alt="Carro Preto na Neblina" 
@@ -508,7 +508,7 @@ export default function StatusDisplay({ status, data }: StatusDisplayProps) {
                 </div>
               </div>
 
-              <div className="w-full md:w-[380px] bg-black/40 border-l border-emerald-500/10 p-8 flex flex-col justify-center relative overflow-hidden">
+              <div className="w-full md:w-95 bg-black/40 border-l border-emerald-500/10 p-8 flex flex-col justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-linear-to-b from-emerald-950/20 to-black/80" />
                 <div className="relative z-10 space-y-6">
                   <div className="flex items-center gap-3 mb-6">
@@ -647,7 +647,7 @@ export default function StatusDisplay({ status, data }: StatusDisplayProps) {
                     </p>
                   </div>
                 </div>
-                <div className="w-full max-w-[200px] mx-auto h-px bg-linear-to-r from-transparent via-neutral-700 to-transparent my-2" />
+                <div className="w-full max-w-50 mx-auto h-px bg-linear-to-r from-transparent via-neutral-700 to-transparent my-2" />
                 <p className="text-neutral-400 max-w-md mx-auto leading-relaxed text-lg font-light">
                   Houve uma interferência na comunicação com o servidor. <br />
                   <span className="text-neutral-200">Não se preocupe, nossos dados estão seguros.</span>
