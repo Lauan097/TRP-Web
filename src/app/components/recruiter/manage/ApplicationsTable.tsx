@@ -120,6 +120,8 @@ function ActionsMenu({ app, onView, onDelete }: ActionsMenuProps) {
 }
 
 export function ApplicationsTable({ applications, onView, onUpdateStatus, onSchedule, onBatchAction, onDelete }: ApplicationsTableProps) {
+  const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+  
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -276,13 +278,13 @@ export function ApplicationsTable({ applications, onView, onUpdateStatus, onSche
               currentApplications.map((app) => (
                 <tr key={app.id} className="border-b border-white/5 hover:bg-[#242424] transition-colors">
                   <td className="p-4">
-                    <div className="font-bold text-white">{app.data.nomeJogo}</div>
+                    <div className="font-bold text-white">{capitalize(app.data.nomeJogo)}</div>
                     <div className="text-xs text-white/50">ID: {app.data.identificacao}</div>
                     <div className="text-xs text-white/50">Discord: {app.user_id}</div>
                   </td>
                   <td className="p-4">
                     <div className="flex flex-col gap-1 text-xs">
-                      <span className="flex items-center gap-1"><ThumbsUp size={14}/>{app.data.nomeMembro || '-'} ({app.data.idMembro})</span>
+                      <span className="flex items-center gap-1"><ThumbsUp size={14}/>{capitalize(app.data.nomeMembro) || '-'} ({app.data.idMembro})</span>
                       <span className="flex items-center gap-1"><Clock size={14}/> {new Date(app.created_at).toLocaleDateString()}</span>
                     </div>
                   </td>

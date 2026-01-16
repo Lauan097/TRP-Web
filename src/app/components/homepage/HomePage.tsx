@@ -64,7 +64,6 @@ export default function DashboardHome() {
     fetch(`${apiUrl}/api/site/dashboard`)
       .then(res => res.json())
       .then(fetchedData => {
-        console.log('Dashboard loaded:', fetchedData);
         setData(fetchedData);
         setLoading(false);
       })
@@ -332,7 +331,7 @@ export default function DashboardHome() {
             <div className="h-full bg-[#1a1a1a] rounded-xl p-6 border border-[#2b2b2b] border-dashed flex flex-col items-center justify-center text-center">
                 <Gift className="w-10 h-10 text-gray-600 mb-3" />
                 <p className="text-gray-400 font-medium">Nenhum sorteio ativo</p>
-                <p className="text-xs text-gray-600 mt-1 max-w-[200px]">Novos eventos aparecerão aqui automaticamente quando criados.</p>
+                <p className="text-xs text-gray-600 mt-1 max-w-50">Novos eventos aparecerão aqui automaticamente quando criados.</p>
             </div>
           )}
           </div>

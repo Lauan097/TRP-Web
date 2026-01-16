@@ -108,7 +108,7 @@ export default function Navbar() {
                         <div className="relative bg-black  border border-neutral-700 rounded-lg shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200 overflow-hidden">
                           
                           <div className="absolute inset-0 flex items-start justify-center pointer-events-none">
-                            <Image src="/caveiraLogo.jpg" alt="" width={120} height={120} className="opacity-50 object-contain translate-y-3" />
+                            <Image src="/caveiraLogo.jpg" alt="" fill sizes="128px" className="opacity-50 object-contain translate-y-3" priority />
                           </div>
 
                           <div className="relative z-10">
@@ -145,7 +145,7 @@ export default function Navbar() {
                       <div className="relative bg-black border border-[#333] rounded-lg shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200 overflow-hidden">
                         
                         <div className="absolute inset-0 flex items-start justify-center pointer-events-none">
-                          <Image src="/caveiraLogo.jpg" alt="" width={90} height={110} className="opacity-50 object-contain translate-y-3" />
+                          <Image src="/caveiraLogo.jpg" alt="" fill sizes="128px" className="opacity-50 object-contain translate-y-3" priority />
                         </div>
 
                         <div className="relative z-10">

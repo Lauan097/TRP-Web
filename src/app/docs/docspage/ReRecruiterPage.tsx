@@ -3,6 +3,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { ArrowRight } from 'lucide-react';
 import { LuOctagonAlert } from "react-icons/lu";
 import { MdOutlineContentCopy } from "react-icons/md";
+import { FaCheck } from "react-icons/fa";
 
 export default function ReRecruiterPage() {
 
@@ -78,9 +79,12 @@ export default function ReRecruiterPage() {
               aria-label="Copiar link"
               className="inline ml-6 cursor-pointer"
             >
-              <MdOutlineContentCopy size={16} className="text-green-500" />
+              {copied ? (
+                <FaCheck className="h-4 w-4 text-green-400" />
+              ) : (
+                <MdOutlineContentCopy size={16} />
+              )}
             </button>
-            {copied && <span className="ml-3 text-green-400 font-semibold font-sans">Copiado!</span>}
           </span>
         </p>
 
@@ -111,7 +115,7 @@ export default function ReRecruiterPage() {
           <h4 className="text-red-500 font-bold mb-2 flex items-center"><LuOctagonAlert className="mr-1" />Importante!</h4>
           <p className="text-sm text-gray-400 mb-4">
             Insira sempre dados <span className="text-green-400 font-mono"> Verdadeiros</span>. Caso alguns do seus dados não apareçam no card de dados antigos, insira-os 
-            no modal de recadastramento. Se os dados aparecerem corretamente no card de dados antigos, insira-os no modal de recadastramento.
+            no modal de recadastramento.
             
           </p>
         </div>

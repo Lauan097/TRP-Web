@@ -83,7 +83,7 @@ export function WarningModal({ isOpen, onClose, user, adminId }: WarningModalPro
             value={reason} 
             onChange={(e) => setReason(e.target.value)} 
             placeholder="Descreva o motivo da advertência..."
-            className="bg-[#121212] border-white/10 min-h-[100px] mt-1 text-white"
+            className="bg-[#121212] border-white/10 min-h-25 mt-1 text-white"
             required
             minLength={10}
             maxLength={300}

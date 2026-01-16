@@ -41,7 +41,15 @@ const questionsMap = [
   { id: 'crash', label: '10 - Confiança' },
 ];
 
+const SHIFT_ROLE_MAP: Record<string, { name: string; color: string; bg?: string }> = {
+  '1447988476237709392': { name: '@ » Manhã', color: 'text-yellow-400', bg: 'bg-yellow-500/12' },
+  '1447988532932120588': { name: '@ » Tarde', color: 'text-orange-400', bg: 'bg-orange-500/12' },
+  '1447988583217758318': { name: '@ » Noite', color: 'text-blue-400', bg: 'bg-blue-500/12' },
+};
+
 export function ViewApplicationModal({ application, viewMode, onClose }: ViewApplicationModalProps) {
+  const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -59,7 +67,7 @@ export function ViewApplicationModal({ application, viewMode, onClose }: ViewApp
             <h2 className="text-xl font-bold text-white">
               {viewMode === 'solicitation' ? 'Dados da Solicitação' : 'Respostas do Formulário'}
             </h2>
-            <p className="text-white/50 text-sm">Candidato: {application.data.nomeJogo} (ID: {application.data.identificacao})</p>
+            <p className="text-white/50 text-sm">Candidato: {capitalize(application.data.nomeJogo)} (ID: {application.data.identificacao})</p>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose} className="bg-[#353535b0] hover:bg-[#444444] transition-colors cursor-pointer">
             <X className="text-white/60 hover:text-white" />
@@ -71,7 +79,7 @@ export function ViewApplicationModal({ application, viewMode, onClose }: ViewApp
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-1">
                 <label className="text-xs uppercase text-white/40 font-bold">Nome no Jogo</label>
-                <div className="text-white p-3 bg-white/5 rounded border border-white/5">{application.data.nomeJogo}</div>
+                <div className="text-white p-3 bg-white/5 rounded border border-white/5">{capitalize(application.data.nomeJogo)}</div>
               </div>
               <div className="space-y-1">
                 <label className="text-xs uppercase text-white/40 font-bold">Passaporte (ID)</label>
@@ -84,18 +92,24 @@ export function ViewApplicationModal({ application, viewMode, onClose }: ViewApp
               <div className="space-y-1">
                 <label className="text-xs uppercase text-white/40 font-bold">Indicação (Padrinho)</label>
                 <div className="text-white p-3 bg-white/5 rounded border border-white/5">
-                  {application.data.nomeMembro} (ID: {application.data.idMembro})
+                  {capitalize(application.data.nomeMembro)} (ID: {application.data.idMembro})
                 </div>
               </div>
               <div className="space-y-1 md:col-span-2">
                 <label className="text-xs uppercase text-white/40 font-bold">Turnos de Jogo</label>
                 <div className="text-white p-3 bg-white/5 rounded border border-white/5 flex gap-2 flex-wrap">
                   {application.data.turnos && application.data.turnos.length > 0 ? (
-                    application.data.turnos.map(t => (
-                      <span key={t} className="px-2 py-1 bg-blue-500/20 text-blue-300 text-xs rounded border border-blue-500/30 capitalize">
-                        {t}
-                      </span>
-                    ))
+                    application.data.turnos.map(t => {
+                      const shift = SHIFT_ROLE_MAP[t];
+                      return (
+                        <span 
+                          key={t} 
+                          className={`px-3 py-0.5 text-xs rounded-md border ${shift ? `${shift.bg} ${shift.color} border-current/30` : 'bg-gray-500/20 text-gray-300 border-gray-500/30'}`}
+                        >
+                          {shift ? shift.name : t}
+                        </span>
+                      );
+                    })
                   ) : (
                     <span className="text-white/30 italic">Nenhum turno selecionado</span>
                   )}

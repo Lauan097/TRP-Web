@@ -54,8 +54,7 @@ export function RecruitmentModal({ isOpen, onClose, user }: RecruitmentModalProp
         return null;
       }
     }
-    console.log('DEBUG - Dados brutos da aplicação:', application);
-    console.log('DEBUG - Dados parseados (JSON):', data);
+
     return data as Record<string, unknown>;
   }, [application]);
 
@@ -72,6 +71,10 @@ export function RecruitmentModal({ isOpen, onClose, user }: RecruitmentModalProp
     }
 
     Object.keys(parsedData).forEach(key => {
+       if (key.toLowerCase() === 'name' || key.toLowerCase() === 'nome') {
+          result['Nome'] = capitalize(String(parsedData[key]));
+       }
+       
        if (key.toLowerCase().startsWith('question')) {
           const val = parsedData[key];
           if (typeof val === 'string' || typeof val === 'number') {

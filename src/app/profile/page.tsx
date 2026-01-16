@@ -1,22 +1,23 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import { useState } from "react";
 import Image from "next/image";
 import { FcGoogle } from "react-icons/fc";
-import { FaDiscord } from "react-icons/fa";
+import { FaDiscord, FaCheck } from "react-icons/fa";
 import { MdFileCopy } from "react-icons/md";
-import { RiAlertLine } from "react-icons/ri";
-import { useToast } from "../components/ToastContext";
 
 export default function Profile() {
   const { data: session } = useSession();
-  const { addToast } = useToast();
+  const [copied, setCopied] = useState(false);
 
-  const handleCopyEmail = () => {
+  const handleCopyEmail = async () => {
     if (session?.user?.email) {
       navigator.clipboard.writeText(session.user.email);
-      addToast("Email copiado!", "success");
     }
+
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
   };
 
   return (
@@ -56,11 +57,11 @@ export default function Profile() {
                 <div className="inline-flex items-center px-3 py-1 rounded-full bg-neutral-800 border border-neutral-700 text-xs text-neutral-400 font-mono ml-2">
                   <FcGoogle className="mr-2" /> 
                   {session?.user?.email || "N/A"}
-                  <MdFileCopy 
-                    className="ml-3 cursor-pointer hover:text-white transition-colors"
-                    onClick={handleCopyEmail}
-                    title="Copiar email"
-                  />
+                  {copied ? (
+                    <FaCheck className="ml-3 cursor-pointer text-green-400" title="Copiado!" />
+                  ) : (
+                    <MdFileCopy className="ml-3 cursor-pointer hover:text-white transition-colors" title="Copiar email" onClick={handleCopyEmail} />
+                  )}
                 </div>
               </div>
 
@@ -84,8 +85,8 @@ export default function Profile() {
 
           <div className="max-w-fit mx-auto">
             <div className="bg-neutral-800 border border-yellow-500/20 rounded-lg p-4 text-center">
-              <div className="text-red-200 font-medium inline-flex items-center gap-1.5">
-                <RiAlertLine className="text-yellow-500 -mt-0.5" /> Atualizações de Perfil em Breve!
+              <div className="font-medium flex items-center justify-center gap-1.5">
+                <span className="text-yellow-500">⚠</span> Atualizações de Perfil em Breve!
               </div>
               <p className="text-sm text-yellow-300/60 mt-1">
                 Estamos trabalhando para trazer novas funcionalidades e estatísticas detalhadas.

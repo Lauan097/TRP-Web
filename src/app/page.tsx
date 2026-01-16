@@ -313,7 +313,7 @@ export default function Home() {
             className="relative logo-container shrink-0 will-change-[filter,transform,opacity]"
           >
             <motion.svg 
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[290px] h-[290px]" 
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72.5 h-72.5" 
               viewBox="0 0 290 290"
               initial={{ opacity: 0, rotate: -90 }}
               animate={{ opacity: 0.4, rotate: 360 }}
@@ -363,7 +363,7 @@ export default function Home() {
                   ease: "easeInOut"
                 }
               }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[268px] h-[268px] rounded-full border border-white/10" 
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-67 h-67 rounded-full border border-white/10" 
             />
             
             <motion.div 
@@ -376,7 +376,7 @@ export default function Home() {
                 repeat: Infinity, 
                 ease: "easeInOut" 
               }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[260px] h-[260px] rounded-full bg-[radial-gradient(circle,rgba(202,117,117,0.18)_0%,transparent_70%)]" 
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-65 h-65 rounded-full bg-[radial-gradient(circle,rgba(202,117,117,0.18)_0%,transparent_70%)]" 
             />
             
             <Image 
@@ -385,6 +385,7 @@ export default function Home() {
               width={250} 
               height={250} 
               className="rounded-full relative z-10 shadow-[0_0_60px_rgba(202,117,117,0.2)]" 
+              priority
             />
           </motion.div>
 
@@ -634,13 +635,13 @@ export default function Home() {
 
       <section className="max-w-5xl w-full mt-12 mb-24 px-4 mx-auto">
         <ScrollReveal delay={0.3}>
-          <div className="relative bg-linear-to-b from-[#1a1a1a] to-black border border-white/10 rounded-3xl overflow-hidden min-h-[600px]">
+          <div className="relative bg-linear-to-b from-[#1a1a1a] to-black border border-white/10 rounded-3xl overflow-hidden min-h-150">
           
             <div className="absolute top-0 right-0 w-full h-full pointer-events-none">
                 <motion.div 
                     animate={{ opacity: [0.3, 0.6, 0.3] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute top-1/2 right-1/4 md:right-[15%] -translate-y-1/2 w-[500px] h-[500px] bg-red-900/30 rounded-full blur-[100px] z-0 will-change-opacity"
+                    className="absolute top-1/2 right-1/4 md:right-[15%] -translate-y-1/2 w-125 h-125 bg-red-900/30 rounded-full blur-[100px] z-0 will-change-opacity"
                 />
             </div>
 
@@ -703,7 +704,7 @@ export default function Home() {
                               {step.tag}
                             </span>
                         </div>
-                        <p className="text-gray-500 text-sm leading-relaxed max-w-[250px]">
+                        <p className="text-gray-500 text-sm leading-relaxed max-w-62.5">
                           {step.desc}
                         </p>
                       </div>

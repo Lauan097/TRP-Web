@@ -24,7 +24,8 @@ export default function Footer() {
                 <Image 
                   src="/logo_trindade.png" 
                   alt="Logo Trindade" 
-                  fill 
+                  width={80}
+                  height={80}
                   className="object-cover"
                 />
               </div>

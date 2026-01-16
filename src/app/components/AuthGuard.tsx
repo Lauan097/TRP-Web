@@ -48,8 +48,6 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
         const hasAccess = isMember || isSpecial || isAdmin;
 
-        console.log('[AuthGuard] Verificação:', { isMember, isSpecial, isAdmin, hasAccess, userId: session.user?.id, pathname });
-
         setIsVerified(hasAccess);
         setIsLoading(false);
         
@@ -87,14 +85,13 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     checkStatus();
   }, [session, status, router, pathname]);
 
-  // Redirecionar apenas quando necessário
   useEffect(() => {
     if (!isLoading && !isVerified && session && pathname !== '/register' && pathname !== '/re-register') {
       router.push('/register');
     }
   }, [isLoading, isVerified, session, pathname, router]);
 
-  if (isLoading) {
+  if (isLoading || (!isVerified && pathname !== '/register' && pathname !== '/re-register')) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0a0a]">
         <div className="flex flex-col items-center gap-4">
